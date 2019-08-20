@@ -66,9 +66,13 @@ app.get('/viewstudents',(req,res)=>{                        //10. mdb using the 
     });
 });
 
+app.get('/searchstudent',(req,res)=>{
+    res.render('searchstudent');
+});
+
 // Define an API to retrieve info of a single student from admno
 app.get('/getAstudentAPI/:admno',(req, res)=>{
-    var admnNo = req.params.admno;
+    var admnNo = req.params.admno; //could equally use var admnNo=req.query.admno; but this cahnges teh Request(apicall), see the UIview function using the API
     StudentModel.find({uadmno:admnNo}, (error, data)=>{
         if(error){
             throw error;
@@ -78,10 +82,26 @@ app.get('/getAstudentAPI/:admno',(req, res)=>{
     });
 });
 
+//create the apilink
+const callSingleStudentAPI = "http://localhost:3080/getAstudentAPI";
+
 //define a UIView for searching student- route it
-app.get('/searchstudent',(req,res)=>{
-    res.render('searchstudent');
+app.post('/searchSingle',(req,res)=>{
+    var item = req.body.uniqadmn
+    Request(callSingleStudentAPI+"/"+ item, (error,response,body)=>{ //Request(callSingleStudentAPI+"/?uniqadmn="+ item, (error,response,body)=>{ //if req.query is used in API definition 
+        if(error){
+            throw error;
+        }else{
+            var data = JSON.parse(body);     
+            //console.log(data);            
+            //res.send(data);
+            res.render('viewsinglestudent',{'data':data});
+            
+        }
+    });
 });
+
+
 
 
 app.listen(process.env.PORT || 3080,()=>{
