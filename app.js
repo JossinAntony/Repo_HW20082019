@@ -9,7 +9,8 @@ app.set('view engine', 'ejs');
 app.use(Express.static(__dirname+'/public'));
 app.use(bodyParser.urlencoded({extended:true})); // parse data from sunmission form <form></form>  in page
 
-Mongoose.connect("mongodb://localhost:27017/collegedb"); //connect the db   2. mdb
+//Mongoose.connect("mongodb://localhost:27017/collegedb"); //connect the db   2. mdb
+Mongoose.connect('mongodb+srv://jossin:jossin@cluster0-arjkd.mongodb.net/test?retryWrites=true&w=majority');
 //create a model (MVC), arguemnts: collection name, schema, 
 
 const StudentModel = Mongoose.model("studentdetails",         // 3.mdb define the student model (including the schema) (the model in MVC)
